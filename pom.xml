@@ -21,15 +21,15 @@
 		<developer>
 			<name>Nicola Semprini</name>
 			<email>nicola.semprini@gmail.com</email>
-			<organization>SMW</organization>
+			<organization>github</organization>
 			<organizationUrl>https://github.com/NicHub-Semprini</organizationUrl>
 		</developer>
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/NicHub-Semprini/vince-bot.git</connection>
-		<developerConnection>scm:git:ssh://github.com/NicHub-Semprini/vince-bot.git</developerConnection>
-		<url>https://github.com/NicHub-Semprini/vince-bot/tree/master</url>
+		<connection>scm:git:git://github.com/NicHub-Semprini/crypto.git</connection>
+		<developerConnection>scm:git:ssh://github.com/NicHub-Semprini/crypto.git</developerConnection>
+		<url>https://github.com/NicHub-Semprini/crypto/tree/main</url>
 	</scm>
 
 	<distributionManagement>
