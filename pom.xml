@@ -8,7 +8,7 @@
 	<version>0.1.0</version>
 	<name>crypto</name>
 	<description>Utilities library to manage cryotography in Java</description>
-	<url>http://github.com/simpligility/ossrh-demo</url>
+	<url>https://github.com/NicHub-Semprini/crypto</url>
 
 	<licenses>
 		<license>
