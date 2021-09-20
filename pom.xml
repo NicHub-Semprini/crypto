@@ -3,9 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.NicHub-Semprini</groupId>
+	<groupId>io.github.NicHub-Semprini</groupId>
 	<artifactId>crypto</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>crypto</name>
 	<description>Utilities library to manage cryotography in Java</description>
 	<url>https://github.com/NicHub-Semprini/crypto</url>
@@ -35,12 +35,8 @@
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
 	</distributionManagement>
 
 	<properties>
@@ -49,6 +45,7 @@
 		<source-plugin.version>3.2.1</source-plugin.version>
 		<javadoc-plugin.version>3.3.1</javadoc-plugin.version>
 		<gpg-plugin.version>3.0.1</gpg-plugin.version>
+		<nexus-plugin.version>1.6.8</nexus-plugin.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 		<maven.compiler.parameters>true</maven.compiler.parameters>
 		<maven.compiler.source>16</maven.compiler.source>
@@ -111,6 +108,17 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>${nexus-plugin.version}</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
