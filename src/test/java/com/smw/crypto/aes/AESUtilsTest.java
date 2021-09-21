@@ -33,7 +33,7 @@ class AESUtilsTest {
 		log.info("Executing {}", getTestName(info));
 		password = String.valueOf(random.nextInt());
 		salt = String.valueOf(random.nextInt());
-		iteractions = random.nextInt(69);
+		iteractions = random.nextInt(69) + 1;
 		random.nextBytes(seed);
 		inputString = String.valueOf(random.nextLong());
 		inputBytes = inputString.getBytes(encoding);
