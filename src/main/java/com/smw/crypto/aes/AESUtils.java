@@ -22,6 +22,20 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Utility static class to crypt and decrypt string and bytes  
+ * @implSpec
+ * ALGORITHM_FAMILY = {@value AESUtils#ALGORITHM_FAMILY}<br/> 
+ * PASSWORD_ALGORITHM = {@value AESUtils#PASSWORD_ALGORITHM}<br/>
+ * ALGORITHM_OFB = {@value AESUtils#ALGORITHM_OFB}<br/>
+ * IV_LENGTH = {@value AESUtils#IV_LENGTH}<br/>
+ * KEY_LENGTH_128 = {@value AESUtils#KEY_LENGTH_128}<br/>
+ * KEY_LENGTH_192 = {@value AESUtils#KEY_LENGTH_192}<br/>
+ * KEY_LENGTH_256 = {@value AESUtils#KEY_LENGTH_256}<br/>
+ * SECURE_RANDOM_ALGORITHM = {@value AESUtils#SECURE_RANDOM_ALGORITHM}<br/>
+ * SECURE_RANDOM_PROVIDER = {@value AESUtils#SECURE_RANDOM_PROVIDER}<br/>
+ * DEFAULT_CHARSET = {@link StandardCharsets#UTF_8}<br/>
+ */
 public class AESUtils {
 
 	public static final String ALGORITHM_FAMILY = "AES";
@@ -37,12 +51,11 @@ public class AESUtils {
 
 	private AESUtils() {}
 
-	// TODO javadoc	
 	/**
-	 * 
-	 * @param keyLength
-	 * @return
-	 * @throws NoSuchAlgorithmException
+	 * Generates a brand new random key
+	 * @param keyLength the length (in bytes) of the key to generate
+	 * @return the generated key
+	 * @throws NoSuchAlgorithmException if {@value AESUtils#ALGORITHM_FAMILY} algorithm family isn't supported 
 	 */
 	public static SecretKey generateRandomKey(int keyLength)
 			throws NoSuchAlgorithmException {
@@ -51,16 +64,15 @@ public class AESUtils {
 		return keyGenerator.generateKey();
 	}
 
-	// TODO javadoc
 	/**
-	 * 
-	 * @param password
-	 * @param salt
-	 * @param iteractions
-	 * @param keyLength
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
+	 * Generates a brand new random key
+	 * @param password key generator initialization password
+	 * @param salt key generator initialization vector
+	 * @param iteractions number of iterations during generation process
+	 * @param keyLength the length (in bytes) of the key to generate
+	 * @return the generated key
+	 * @throws NoSuchAlgorithmException if {@value AESUtils#PASSWORD_ALGORITHM} algorithm isn't supported 
+	 * @throws InvalidKeySpecException if {@value AESUtils#ALGORITHM_FAMILY} algorithm family isn't supported 
 	 */
 	public static SecretKey generateKeyFromPassword(String password, String salt, int iteractions, int keyLength)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -69,12 +81,11 @@ public class AESUtils {
 		return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), ALGORITHM_FAMILY);
 	}
 
-	// TODO javadoc
 	/**
-	 * 
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchProviderException
+	 * Generates a brand new random initialization vector (iv) of {@value AESUtils#IV_LENGTH} bytes
+	 * @return the generated vector
+	 * @throws NoSuchAlgorithmException if {@value AESUtils#SECURE_RANDOM_ALGORITHM} algorithm isn't supported by {@value AESUtils#SECURE_RANDOM_PROVIDER} provider
+	 * @throws NoSuchProviderException if {@value AESUtils#SECURE_RANDOM_PROVIDER} provider isn't supported
 	 */
 	public static IvParameterSpec generateIv()
 			throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -83,13 +94,12 @@ public class AESUtils {
 		return new IvParameterSpec(iv);
 	}
 
-	// TODO javadoc
 	/**
-	 * 
-	 * @param seed
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchProviderException
+	 * Generates a brand new random initialization vector (iv) of {@value AESUtils#IV_LENGTH} bytes
+	 * @param seed the seed used for vector generation
+	 * @return the generated vector
+	 * @throws NoSuchAlgorithmException if {@value AESUtils#SECURE_RANDOM_ALGORITHM} algorithm isn't supported by {@value AESUtils#SECURE_RANDOM_PROVIDER} provider
+	 * @throws NoSuchProviderException if {@value AESUtils#SECURE_RANDOM_PROVIDER} provider isn't supported
 	 */
 	public static IvParameterSpec generateIv(byte[] seed)
 			throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -100,22 +110,21 @@ public class AESUtils {
 		return new IvParameterSpec(iv);
 	}
 	
-	// TODO javadoc
 	/**
-	 * stringa-stringa base64 con encoding input != output
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @param inputCharset
-	 * @param outputCharset
-	 * @return 
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given base64-encoded input string producing a base64-encoded output string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the base64-encoded string to encrypt
+	 * @param inputCharset the input string {@link Charset}
+	 * @param outputCharset the output string {@link Charset}
+	 * @return the base64-encoded encrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String encryptToString(String algorithm, SecretKey key, IvParameterSpec iv, String input, Charset inputCharset, Charset outputCharset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -123,21 +132,20 @@ public class AESUtils {
 		return encryptToString(algorithm, key, iv, input.getBytes(inputCharset), outputCharset);
 	}
 	
-	// TODO javadoc
 	/**
-	 * stringa-stringa base64 con encoding input = output
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @param charset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given base64-encoded input string producing a base64-encoded output string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the base64-encoded string to encrypt
+	 * @param charset the input and output strings {@link Charset}
+	 * @return the base64-encoded encrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String encryptToString(String algorithm, SecretKey key, IvParameterSpec iv, String input, Charset charset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -145,20 +153,19 @@ public class AESUtils {
 		return encryptToString(algorithm, key, iv, input, charset, charset);
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-stringa base64 con encoding input = output = DEFAULT_ENCODING
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given UTF-8 base64-encoded input string producing an UTF-8 base64-encoded output string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the UTF-8 base64-encoded string to encrypt
+	 * @return the UTF-8 base64-encoded encrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String encryptToString(String algorithm, SecretKey key, IvParameterSpec iv, String input)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -166,20 +173,19 @@ public class AESUtils {
 		return encryptToString(algorithm, key, iv, input, DEFAULT_CHARSET);
 	}
 
-	// TODO javadoc
 	/**
-	 * byte-stringa base64 con encoding output = DEFAULT_ENCODING
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given bytes producing an UTF-8 base64-encoded string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the bytes to encrypt
+	 * @return the UTF-8 base64-encoded encrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String encryptToString(String algorithm, SecretKey key, IvParameterSpec iv, byte[] input)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -187,21 +193,20 @@ public class AESUtils {
 		return encryptToString(algorithm, key, iv, input, DEFAULT_CHARSET);
 	}
 	
-	// TODO javadoc
 	/**
-	 * byte-stringa versione base
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @param charset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given bytes producing a base64-encoded string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the bytes to encrypt
+	 * @param charset the string {@link Charset}
+	 * @return the base64-encoded encrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String encryptToString(String algorithm, SecretKey key, IvParameterSpec iv, byte[] input, Charset charset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -209,21 +214,20 @@ public class AESUtils {
 		return new String(Base64.getEncoder().encode(encrypt(algorithm, key, iv, input)), charset);
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-byte con encoding output
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @param charset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given base64-encoded string producing bytes
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the base64-encoded string to encrypt
+	 * @param charset the string {@link Charset}
+	 * @return the encrypted bytes
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static byte[] encrypt(String algorithm, SecretKey key, IvParameterSpec iv, String input, Charset charset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -231,20 +235,19 @@ public class AESUtils {
 		return encrypt(algorithm, key, iv, input.getBytes(charset));
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-byte con encoding output = DEFAULT_ENCODING
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given UTF-8 base64-encoded string producing bytes
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the base64-encoded string to encrypt
+	 * @return the encrypted bytes
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static byte[] encrypt(String algorithm, SecretKey key, IvParameterSpec iv, String input)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -252,20 +255,19 @@ public class AESUtils {
 		return encrypt(algorithm, key, iv, input, DEFAULT_CHARSET);
 	}
 
-	// TODO javadoc
 	/**
-	 * byte-byte versione base
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Encrypts given input bytes producing output bytes
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the bytes to encrypt
+	 * @return the encrypted bytes
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static byte[] encrypt(String algorithm, SecretKey key, IvParameterSpec iv, byte[] input)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -275,22 +277,21 @@ public class AESUtils {
 		return cipher.doFinal(input);
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-stringa con encoding input != output
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param base64String
-	 * @param inputCharset
-	 * @param outputCharset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given base64-encoded input string producing an output string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param base64String the base64-encoded string to decrypt
+	 * @param inputCharset the input string {@link Charset}
+	 * @param outputCharset the output string {@link Charset}
+	 * @return the decrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String decryptToString(String algorithm, SecretKey key, IvParameterSpec iv, String base64String, Charset inputCharset, Charset outputCharset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -298,21 +299,20 @@ public class AESUtils {
 		return decryptToString(algorithm, key, iv, Base64.getDecoder().decode(base64String.getBytes(inputCharset)), outputCharset);
 	}
 	
-	// TODO javadoc
 	/**
-	 * stringa-stringa con encoding input = output
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param base64String
-	 * @param charset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given base64-encoded input string producing an output string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param base64String the base64-encoded string to decrypt
+	 * @param charset the input and output strings {@link Charset}
+	 * @return the decrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String decryptToString(String algorithm, SecretKey key, IvParameterSpec iv, String base64String, Charset charset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -320,20 +320,19 @@ public class AESUtils {
 		return decryptToString(algorithm, key, iv, base64String, charset, charset);
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-stringa con encoding input = output = DEFAULT_ENCODING
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param base64String
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given UTF-8 base64-encoded input string producing an UTF-8 output string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param base64String the base64-encoded string to decrypt
+	 * @return the decrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String decryptToString(String algorithm, SecretKey key, IvParameterSpec iv, String base64String)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -341,21 +340,20 @@ public class AESUtils {
 		return decryptToString(algorithm, key, iv, base64String, DEFAULT_CHARSET);
 	}
 
-	// TODO javadoc
 	/**
-	 * byte-stringa con encoding output
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @param charset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given bytes producing a string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the bytes to decrypt
+	 * @param charset the string {@link Charset}
+	 * @return the decrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String decryptToString(String algorithm, SecretKey key, IvParameterSpec iv, byte[] input, Charset charset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -363,20 +361,19 @@ public class AESUtils {
 		return new String(decrypt(algorithm, key, iv, input), charset);
 	}
 	
-	// TODO javadoc
 	/**
-	 * byte-stringa con encoding output = DEFAULT_ENCODING
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given bytes producing an UTF-8 string
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the bytes to decrypt
+	 * @return the decrypted string
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static String decryptToString(String algorithm, SecretKey key, IvParameterSpec iv, byte[] input)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -384,21 +381,20 @@ public class AESUtils {
 		return decryptToString(algorithm, key, iv, input, DEFAULT_CHARSET);
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-byte con encoding input
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param base64String
-	 * @param charset
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given base64-encoded string producing bytes
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param base64String the base64-encoded string to decrypt
+	 * @param charset the string {@link Charset}
+	 * @return the decrypted bytes
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static byte[] decrypt(String algorithm, SecretKey key, IvParameterSpec iv, String base64String, Charset charset)
 			throws NoSuchPaddingException, NoSuchAlgorithmException,
@@ -406,20 +402,19 @@ public class AESUtils {
 		return decrypt(algorithm, key, iv, Base64.getDecoder().decode(base64String.getBytes(charset)));
 	}
 
-	// TODO javadoc
 	/**
-	 * stringa-byte con encoding input
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param base64String
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given UTF-8 base64-encoded string producing bytes
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param base64String the UTF-8 base64-encoded string to decrypt
+	 * @return the decrypted bytes
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static byte[] decrypt(String algorithm, SecretKey key, IvParameterSpec iv, String base64String)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
@@ -427,20 +422,19 @@ public class AESUtils {
 		return decrypt(algorithm, key, iv, base64String, DEFAULT_CHARSET);
 	}
 
-	// TODO javadoc
 	/**
-	 * byte-byte versione base
-	 * @param algorithm
-	 * @param key
-	 * @param iv
-	 * @param input
-	 * @return
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * Decrypts given input bytes producing output bytes
+	 * @param algorithm the encryption algorithm
+	 * @param key the encryption {@link SecretKey}
+	 * @param iv the encryption {@link IvParameterSpec}
+	 * @param input the bytes to decrypt
+	 * @return the decrypted bytes
+	 * @throws NoSuchPaddingException by the underlying {@link Cipher}
+	 * @throws NoSuchAlgorithmException by the underlying {@link Cipher}
+	 * @throws InvalidAlgorithmParameterException by the underlying {@link Cipher}
+	 * @throws InvalidKeyException by the underlying {@link Cipher}
+	 * @throws BadPaddingException by the underlying {@link Cipher}
+	 * @throws IllegalBlockSizeException by the underlying {@link Cipher}
 	 */
 	public static byte[] decrypt(String algorithm, SecretKey key, IvParameterSpec iv, byte[] input)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,

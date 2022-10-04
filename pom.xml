@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.NicHub-Semprini</groupId>
 	<artifactId>crypto</artifactId>
-	<version>0.2.0</version>
+	<version>1.0.0</version>
 	<name>crypto</name>
 	<description>Utilities library to manage cryotography in Java</description>
 	<url>https://github.com/NicHub-Semprini/crypto</url>
@@ -51,7 +51,7 @@
 		<maven.compiler.source>16</maven.compiler.source>
 		<maven.compiler.target>16</maven.compiler.target>
 		<maven.gpg.version>2.2.28</maven.gpg.version>
-		<logback.version>1.2.6</logback.version>
+		<logback.version>1.4.0</logback.version>
 	</properties>
 
 	<dependencies>
@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.32</version>
+			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
