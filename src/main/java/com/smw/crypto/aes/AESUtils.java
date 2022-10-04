@@ -23,18 +23,21 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Utility static class to crypt and decrypt string and bytes  
- * @implSpec
- * ALGORITHM_FAMILY = {@value AESUtils#ALGORITHM_FAMILY}<br/> 
- * PASSWORD_ALGORITHM = {@value AESUtils#PASSWORD_ALGORITHM}<br/>
- * ALGORITHM_OFB = {@value AESUtils#ALGORITHM_OFB}<br/>
- * IV_LENGTH = {@value AESUtils#IV_LENGTH}<br/>
- * KEY_LENGTH_128 = {@value AESUtils#KEY_LENGTH_128}<br/>
- * KEY_LENGTH_192 = {@value AESUtils#KEY_LENGTH_192}<br/>
- * KEY_LENGTH_256 = {@value AESUtils#KEY_LENGTH_256}<br/>
- * SECURE_RANDOM_ALGORITHM = {@value AESUtils#SECURE_RANDOM_ALGORITHM}<br/>
- * SECURE_RANDOM_PROVIDER = {@value AESUtils#SECURE_RANDOM_PROVIDER}<br/>
- * DEFAULT_CHARSET = {@link StandardCharsets#UTF_8}<br/>
+ * Utility static class to crypt and decrypt string and bytes<br/>
+ * <br/>
+ * <b>Public static variables:</b>
+ * <ul>
+ * <li>ALGORITHM_FAMILY = {@value AESUtils#ALGORITHM_FAMILY}</li>
+ * <li>PASSWORD_ALGORITHM = {@value AESUtils#PASSWORD_ALGORITHM}</li>
+ * <li>ALGORITHM_OFB = {@value AESUtils#ALGORITHM_OFB}</li>
+ * <li>IV_LENGTH = {@value AESUtils#IV_LENGTH}</li>
+ * <li>KEY_LENGTH_128 = {@value AESUtils#KEY_LENGTH_128}</li>
+ * <li>KEY_LENGTH_192 = {@value AESUtils#KEY_LENGTH_192}</li>
+ * <li>KEY_LENGTH_256 = {@value AESUtils#KEY_LENGTH_256}</li>
+ * <li>SECURE_RANDOM_ALGORITHM = {@value AESUtils#SECURE_RANDOM_ALGORITHM}</li>
+ * <li>SECURE_RANDOM_PROVIDER = {@value AESUtils#SECURE_RANDOM_PROVIDER}</li>
+ * <li>DEFAULT_CHARSET = {@link StandardCharsets#UTF_8}</li>
+ * </ul>
  */
 public class AESUtils {
 
