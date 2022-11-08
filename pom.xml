@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.NicHub-Semprini</groupId>
 	<artifactId>crypto</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>crypto</name>
 	<description>Utilities library to manage cryotography in Java</description>
 	<url>https://github.com/NicHub-Semprini/crypto</url>
