@@ -44,7 +44,6 @@
 	</distributionManagement>
 
 	<properties>
-		<java.version>16</java.version>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<source-plugin.version>3.2.1</source-plugin.version>
 		<javadoc-plugin.version>3.3.1</javadoc-plugin.version>
@@ -52,8 +51,7 @@
 		<nexus-plugin.version>1.6.13</nexus-plugin.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 		<maven.compiler.parameters>true</maven.compiler.parameters>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
+		<maven.compiler.release>11</maven.compiler.release>
 		<maven.gpg.version>2.2.28</maven.gpg.version>
 		<logback.version>1.4.0</logback.version>
 	</properties>
