@@ -1,4 +1,4 @@
-package com.smw.crypto.aes;
+package com.smw.crypto.implementation.aes;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
