@@ -6,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 /**
  * Utility static class grouping common constants:
  * <ul>
+ * <li>DEFAULT_CHARSET = {@link StandardCharsets#UTF_8}</li>
+ * <li>DEFAULT_SYMMETRIC_PASSWORD_ALGORITHM = {@value Constants#DEFAULT_SYMMETRIC_PASSWORD_ALGORITHM}</li>
+ * <li>SecureRandomProviders</li>
  * <li>SecureRandomProviders</li>
  * <li>SecureRandomAlgorithms</li>
  * </ul>

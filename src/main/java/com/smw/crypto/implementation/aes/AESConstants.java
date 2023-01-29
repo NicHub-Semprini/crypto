@@ -4,9 +4,8 @@ package com.smw.crypto.implementation.aes;
  * Utility static class grouping AES constants:
  * <ul>
  * <li>ALGORITHM_FAMILY = {@value AESConstants#ALGORITHM_FAMILY}</li>
- * <li>PASSWORD_ALGORITHM = {@value AESConstants#PASSWORD_ALGORITHM}</li>
- * <li>IV_LENGTH = {@value AESConstants#IV_LENGTH}</li>
  * <li>AlgorithmImplementations</li>
+ * <li>IvLengths</li>
  * <li>KeyLengths</li>
  * </ul>
  */
