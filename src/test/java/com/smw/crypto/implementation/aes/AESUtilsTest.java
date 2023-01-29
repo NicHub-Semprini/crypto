@@ -7,17 +7,16 @@ import java.security.SecureRandom;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-class AESUtilsTest {
+import com.smw.crypto.BaseCryptoTest;
+import com.smw.crypto.implementation.aes.AESConstants.AlgorithmImplementations;
+import com.smw.crypto.implementation.aes.AESConstants.KeyLengths;
+
+class AESUtilsTest extends BaseCryptoTest {
 	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private final SecureRandom random = new SecureRandom();
 	private final Charset encoding = StandardCharsets.UTF_8;
 	
@@ -27,23 +26,29 @@ class AESUtilsTest {
 	byte[] seed = new byte[8];
 	String inputString;
 	byte[] inputBytes;
+	private KeyLengths keyLength;
+	private AlgorithmImplementations algorithm;
 	
 	@BeforeEach
-	void startUp(TestInfo info) {
-		log.info("Executing {}", getTestName(info));
+	void printVariables() {
 		password = String.valueOf(random.nextInt());
 		salt = String.valueOf(random.nextInt());
 		iteractions = random.nextInt(69) + 1;
 		random.nextBytes(seed);
 		inputString = String.valueOf(random.nextLong());
 		inputBytes = inputString.getBytes(encoding);
+		keyLength = KeyLengths.values()[random.nextInt(KeyLengths.values().length)];
+		algorithm = AlgorithmImplementations.values()[random.nextInt(AlgorithmImplementations.values().length)];
+		log.info("encoding = {}", encoding);
+		log.info("password = {}", password);
+		log.info("salt = {}", salt);
+		log.info("iteractions = {}", iteractions);
+		log.info("inputString = {}", inputString);
+		log.info("inputBytes = {}", inputBytes);
+		log.info("keyLength = {}", keyLength);
+		log.info("algorithm = {}", algorithm);
 	}
 	
-	@AfterEach
-	void tearDown(TestInfo info) {
-		log.info("Executed {}", info.getDisplayName().substring(0, info.getDisplayName().length() - 2));
-	}
-
 	@Test
 	void generateIvWithoutSeed() throws Exception {
 		IvParameterSpec iv1 = AESUtils.generateIv();
@@ -60,24 +65,24 @@ class AESUtilsTest {
 	
 	@Test
 	void fromByteToByteWithRandomKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey randomKey = AESUtils.generateRandomKey(AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, inputBytes);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, inputBytes);
-		byte[] decryptedBytes1 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedBytes);
-		byte[] decryptedBytes2 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey randomKey = AESUtils.generateRandomKey(keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, randomKey, iv, inputBytes);
+		String encryptedString = AESUtils.encryptToString(algorithm, randomKey, iv, inputBytes);
+		byte[] decryptedBytes1 = AESUtils.decrypt(algorithm, randomKey, iv, encryptedBytes);
+		byte[] decryptedBytes2 = AESUtils.decrypt(algorithm, randomKey, iv, encryptedString);
 		Assertions.assertArrayEquals(inputBytes, decryptedBytes1);
 		Assertions.assertArrayEquals(inputBytes, decryptedBytes2);
 	}
 	
 	@Test
 	void fromByteToStringWithRandomKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey randomKey = AESUtils.generateRandomKey(AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, inputBytes);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, inputBytes);
-		String decryptedString1 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedBytes);
-		String decryptedString2 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedString, encoding);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey randomKey = AESUtils.generateRandomKey(keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, randomKey, iv, inputBytes);
+		String encryptedString = AESUtils.encryptToString(algorithm, randomKey, iv, inputBytes);
+		String decryptedString1 = AESUtils.decryptToString(algorithm, randomKey, iv, encryptedBytes);
+		String decryptedString2 = AESUtils.decryptToString(algorithm, randomKey, iv, encryptedString, encoding);
 		Assertions.assertEquals(inputString, decryptedString1);
 		Assertions.assertEquals(inputString, decryptedString2);
 		Assertions.assertArrayEquals(inputBytes, decryptedString1.getBytes(encoding));
@@ -86,12 +91,12 @@ class AESUtilsTest {
 	
 	@Test
 	void fromStringToByteWithRandomKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey randomKey = AESUtils.generateRandomKey(AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, inputString);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, inputString);
-		byte[] decryptedBytes1 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedBytes);
-		byte[] decryptedBytes2 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey randomKey = AESUtils.generateRandomKey(keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, randomKey, iv, inputString);
+		String encryptedString = AESUtils.encryptToString(algorithm, randomKey, iv, inputString);
+		byte[] decryptedBytes1 = AESUtils.decrypt(algorithm, randomKey, iv, encryptedBytes);
+		byte[] decryptedBytes2 = AESUtils.decrypt(algorithm, randomKey, iv, encryptedString);
 		Assertions.assertEquals(inputString, new String(decryptedBytes1, encoding));
 		Assertions.assertEquals(inputString, new String(decryptedBytes2, encoding));
 		Assertions.assertArrayEquals(inputString.getBytes(encoding), decryptedBytes1);
@@ -100,36 +105,36 @@ class AESUtilsTest {
 	
 	@Test
 	void fromStringToStringWithRandomKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey randomKey = AESUtils.generateRandomKey(AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, randomKey, iv, inputString);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, inputString);
-		String decryptedString1 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedBytes);
-		String decryptedString2 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, randomKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey randomKey = AESUtils.generateRandomKey(keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, randomKey, iv, inputString);
+		String encryptedString = AESUtils.encryptToString(algorithm, randomKey, iv, inputString);
+		String decryptedString1 = AESUtils.decryptToString(algorithm, randomKey, iv, encryptedBytes);
+		String decryptedString2 = AESUtils.decryptToString(algorithm, randomKey, iv, encryptedString);
 		Assertions.assertEquals(inputString, decryptedString1);
 		Assertions.assertEquals(inputString, decryptedString2);
 	}
 	
 	@Test
 	void fromByteToByteWithPasswordKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputBytes);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputBytes);
-		byte[] decryptedBytes1 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedBytes);
-		byte[] decryptedBytes2 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, passwordKey, iv, inputBytes);
+		String encryptedString = AESUtils.encryptToString(algorithm, passwordKey, iv, inputBytes);
+		byte[] decryptedBytes1 = AESUtils.decrypt(algorithm, passwordKey, iv, encryptedBytes);
+		byte[] decryptedBytes2 = AESUtils.decrypt(algorithm, passwordKey, iv, encryptedString);
 		Assertions.assertArrayEquals(inputBytes, decryptedBytes1);
 		Assertions.assertArrayEquals(inputBytes, decryptedBytes2);
 	}
 	
 	@Test
 	void fromByteToStringWithPasswordKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputBytes);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputBytes);
-		String decryptedString1 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedBytes);
-		String decryptedString2 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, passwordKey, iv, inputBytes);
+		String encryptedString = AESUtils.encryptToString(algorithm, passwordKey, iv, inputBytes);
+		String decryptedString1 = AESUtils.decryptToString(algorithm, passwordKey, iv, encryptedBytes);
+		String decryptedString2 = AESUtils.decryptToString(algorithm, passwordKey, iv, encryptedString);
 		Assertions.assertEquals(inputString, decryptedString1);
 		Assertions.assertEquals(inputString, decryptedString2);
 		Assertions.assertArrayEquals(inputBytes, decryptedString1.getBytes(encoding));
@@ -138,12 +143,12 @@ class AESUtilsTest {
 	
 	@Test
 	void fromStringToByteWithPasswordKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputString);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputString);
-		byte[] decryptedBytes1 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedBytes);
-		byte[] decryptedBytes2 = AESUtils.decrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, passwordKey, iv, inputString);
+		String encryptedString = AESUtils.encryptToString(algorithm, passwordKey, iv, inputString);
+		byte[] decryptedBytes1 = AESUtils.decrypt(algorithm, passwordKey, iv, encryptedBytes);
+		byte[] decryptedBytes2 = AESUtils.decrypt(algorithm, passwordKey, iv, encryptedString);
 		Assertions.assertEquals(inputString, new String(decryptedBytes1, encoding));
 		Assertions.assertEquals(inputString, new String(decryptedBytes2, encoding));
 		Assertions.assertArrayEquals(inputString.getBytes(encoding), decryptedBytes1);
@@ -152,17 +157,21 @@ class AESUtilsTest {
 	
 	@Test
 	void fromStringToStringWithPasswordKey() throws Exception {
-		IvParameterSpec iv = AESUtils.generateIv();
-		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, AESUtils.KEY_LENGTH_256);
-		byte[] encryptedBytes = AESUtils.encrypt(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputString);
-		String encryptedString = AESUtils.encryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, inputString);
-		String decryptedString1 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedBytes);
-		String decryptedString2 = AESUtils.decryptToString(AESUtils.ALGORITHM_OFB, passwordKey, iv, encryptedString);
+		IvParameterSpec iv = generateIv(algorithm);
+		SecretKey passwordKey = AESUtils.generateKeyFromPassword(password, salt, iteractions, keyLength);
+		byte[] encryptedBytes = AESUtils.encrypt(algorithm, passwordKey, iv, inputString);
+		String encryptedString = AESUtils.encryptToString(algorithm, passwordKey, iv, inputString);
+		String decryptedString1 = AESUtils.decryptToString(algorithm, passwordKey, iv, encryptedBytes);
+		String decryptedString2 = AESUtils.decryptToString(algorithm, passwordKey, iv, encryptedString);
 		Assertions.assertEquals(inputString, decryptedString1);
 		Assertions.assertEquals(inputString, decryptedString2);
 	}
 	
-	private String getTestName(TestInfo info) {
-		return info.getDisplayName().substring(0, info.getDisplayName().length() - 2);
+	private IvParameterSpec generateIv(AlgorithmImplementations algorithm) throws Exception {
+		IvParameterSpec result = null;
+		if(algorithm != AlgorithmImplementations.ECB) {
+			result = AESUtils.generateIv();
+		}
+		return result;
 	}
 }
