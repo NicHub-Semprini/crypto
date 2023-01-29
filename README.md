@@ -10,5 +10,13 @@ Java library to handle cryptography
 ---
 
 ## Supported Algorithm
+
+### Symmetrics
 * AES
-    * AES/OFB32/PKCS5Padding
+    * CBC
+    * CFB
+    * CFB32
+    * ECB
+    * OFB
+    * OFB32
+    * PCBC
