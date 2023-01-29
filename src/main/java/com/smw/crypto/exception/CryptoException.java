@@ -1,6 +1,8 @@
 package com.smw.crypto.exception;
 
-// TODO javadoc: superclasse per tutte le eccezioni lanciate dalla libreria
+/**
+ * Superclass of all thrown exceptions
+ */
 public class CryptoException extends Exception {
 
 	private static final long serialVersionUID = -6616590118200736789L;

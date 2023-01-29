@@ -1,6 +1,8 @@
 package com.smw.crypto.exception;
 
-//TODO javadoc: wrapper per le eccezioni lanciate durante le crypt/decrypt
+/**
+ * Wrapper for exceptions typically thrown by encrypting/decrypting methods
+ */
 public class CypherOperationException extends CryptoException {
 
 	private static final long serialVersionUID = -8139830105096429230L;
